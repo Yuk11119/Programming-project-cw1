@@ -6,7 +6,7 @@
 
 struct node{
     int row, col;
-}s, e, curPoint, nextPoint;
+};
 
 bool checkArgumentValidation(char *commandArgument[])
 {
@@ -46,19 +46,39 @@ char** readFile(int rows, int cols, char *fileName) {
     return map;
 }
 
-bool nodecmp(const node a, const node b)
+bool nodecmp(const struct node a, const struct node b)
 {
     if(a.col != b.col || a.row != b.row) return false;
     else return true;
 }
 
-bool checkLocation(node x)
+bool checkLocation(struct node x)
 {
+    // Check whether the current direction of movement is legal
+    // Whether the curPoint is a border or a wall
+}
 
+void outputMap(char **map, int row, int col)
+{
+    // Output the maze to meet the requirement of input-'m'
+    for(int i = 0; i < row; i++) {
+        for(int j = 0; j < col; j++) {
+            printf("%c", map[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void updateMap(char **map, struct node curPoint, struct node nextPoint)
+{
+    // Update the information of current point in the maze
+    map[curPoint.row][curPoint.col] = ' ';
+    map[nextPoint.row][nextPoint.col] = 'X';
 }
 
 int main(char *argv[])
 {
+    struct node s, e, curPoint, nextPoint;
     char op;
 
     // Check the validation of command line arguments
@@ -104,7 +124,7 @@ int main(char *argv[])
         nextPoint.col = curPoint.col;
 
         // Check the input validation
-        if(op == 'm') outputMap();
+        if(op == 'm') outputMap(map, height, width);
         else if(op == 'w' || op == 'a' || op == 's' || op == 'd') {
             if(op == 'w') nextPoint.row--;
             else if(op == 'a') nextPoint.col--;
@@ -112,15 +132,16 @@ int main(char *argv[])
             else nextPoint.col++;
 
             if(checkLocation(nextPoint)){
-                updateMap(curPoint, nextPoint);
+                updateMap(map, curPoint, nextPoint);
             }
             else {
                 printf("oops! This step may have hit a snag.\n");
                 printf("Please try again\n");
             }
         }
-        else
-        
+        else {
+            printf("The operation is not valide, Please change it\n");
+        }
     }
     
     // Output the flag of win
